@@ -62,15 +62,36 @@ app.delete('/api/persons/:id', (req, res) => {
 
 app.post('/api/persons', (req, res) => {
     const data = req.body
-    data.id = getRandomId()
-    persons.push(data)
-    res.json(data)
+    let isDataValid = true
+    let status = {
+        error: ''
+    }
+
+    if (data.name === undefined || data.number === undefined) {
+        status.error = 'Name and number must be specified'
+        isDataValid = false
+    }
+    else {
+        if (persons.find((person) => person.name === data.name)) {
+            status.error = 'Name must be unique'
+            isDataValid = false
+        }
+    }
+
+    if (isDataValid) {
+        data.id = getRandomId()
+        persons.push(data)
+        res.json(data)
+    }
+    else {
+        res.json(status)
+    }
 })
 
 function getRandomId() {
     let max = 10000
-    return Math.floor(Math.random() * Math.floor(max))
-  }
+    return Math.floor(Math.random() * max)
+}
 
 const PORT = 3001
 app.listen(PORT, () => {
