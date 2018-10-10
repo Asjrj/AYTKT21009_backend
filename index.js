@@ -29,6 +29,11 @@ app.get('/', (req, res) => {
     res.send('<h1>Hello Puhelinluettelo</h1>')
 })
 
+app.get('/info', (req, res) => {
+    let today = new Date().toUTCString();
+    res.send(`<p>Puhelinluettelossa on ${persons.length} henkilön tiedot</p><p> ${today}</p>`)
+})
+
 app.get('/api/persons', (req, res) => {
     res.json(persons)
 })
