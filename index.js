@@ -49,7 +49,7 @@ app.get('/api/persons', (req, res) => {
     PhoneNumber
         .find({})
         .then(phones => {
-            res.json(phones)
+            res.json(phones.map(PhoneNumber.format))
         })
 })
 
