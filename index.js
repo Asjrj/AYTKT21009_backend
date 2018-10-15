@@ -3,6 +3,7 @@ const app = express()
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
+const PhoneNumber = require('./models/phonenumber')
 
 app.use(bodyParser.json())
 app.use(cors())
@@ -45,20 +46,19 @@ app.get('/info', (req, res) => {
 })
 
 app.get('/api/persons', (req, res) => {
-    res.json(persons)
+    PhoneNumber
+        .find({})
+        .then(phones => {
+            res.json(phones)
+        })
 })
 
 app.get('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-    if (id > persons.length || id < 1) {
-        res.status(404).end()
-    }
-    else {
-        let person = persons.find((elem) => {
-            return (elem.id === id)
+    PhoneNumber
+        .find({ id: req.params.id })
+        .then(phone => {
+            res.json(phone)
         })
-        res.json(person)
-    }
 })
 
 app.delete('/api/persons/:id', (req, res) => {
