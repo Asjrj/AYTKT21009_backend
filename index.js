@@ -12,37 +12,21 @@ app.use(express.static('build'))
 morgan.token('data', function (req, res) { return JSON.stringify(req.body) })
 app.use(morgan(':method :url :status :data :res[content-length] - :response-time ms'))
 
-let persons = [
-    {
-        name: "Arto Hellas",
-        number: "040-123456",
-        id: 1
-    },
-    {
-        name: "Martti Tienari",
-        number: "040-123456",
-        id: 2
-    },
-    {
-        name: "Arto Järvinen",
-        number: "040-123456",
-        id: 3
-    },
-    {
-        name: "Lea Kutvonen",
-        number: "040-123456",
-        id: 4
-    }
-]
-
-
 app.get('/', (req, res) => {
     res.send('<h1>Hello Puhelinluettelo</h1>')
 })
 
 app.get('/info', (req, res) => {
-    let today = new Date().toUTCString();
-    res.send(`<p>Puhelinluettelossa on ${persons.length} henkilön tiedot</p><p> ${today}</p>`)
+    let today = new Date().toString();
+    PhoneNumber
+        .estimatedDocumentCount()
+        .then(result => {
+            res.send(`<p>Puhelinluettelossa on ${result} henkilön tiedot</p><p>${today}</p>`)
+        })
+        .catch(error => {
+            console.log(error)
+            res.status(400).end()
+        })
 })
 
 app.get('/api/persons', (req, res) => {
