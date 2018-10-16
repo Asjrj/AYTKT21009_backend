@@ -102,7 +102,7 @@ app.post('/api/persons', (req, res) => {
         })
         newnumber
             .save()
-            .then (result => {
+            .then(result => {
                 res.json(PhoneNumber.format(result))
             })
             .catch(error => {
@@ -114,10 +114,24 @@ app.post('/api/persons', (req, res) => {
     }
 })
 
-function getRandomId() {
-    let max = 10000
-    return Math.floor(Math.random() * max)
-}
+app.put('/api/persons/:id', (req, res) => {
+    const data = req.body
+    const newphone = {
+        name: data.name,
+        number: data.number
+    }
+
+    PhoneNumber
+        .findByIdAndUpdate(req.params.id, newphone, { new: true })
+        .then(result => {
+            res.json(PhoneNumber.format(result))
+        })
+        .catch(error => {
+            console.log(error)
+            response.status(400).send({ error: 'malformatted id' })
+        })
+})
+
 
 const PORT = 3001
 app.listen(PORT, () => {
