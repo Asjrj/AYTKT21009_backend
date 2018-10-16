@@ -3,3 +3,7 @@ Tehtävän 3.10 Backend löytyy: https://puhback-yerghltpig.now.sh/api/persons/
 
 Tehtävän 3.11 sovellus löytyy: 
 https://puhback-bwjkctktmz.now.sh
+
+Tehtävän 3.20 sovellus löytyy:
+https://puhback-kwhwdfngmi.now.sh/
+
