@@ -54,17 +54,33 @@ app.get('/api/persons', (req, res) => {
 })
 
 app.get('/api/persons/:id', (req, res) => {
+    console.log('*GET ID*', req.params.id)
     PhoneNumber
-        .find({ id: req.params.id })
+        .findById(req.params.id)
         .then(phone => {
-            res.json(phone)
+            if (phone) {
+                res.json(PhoneNumber.format(phone))
+            }
+            else {
+                res.status(404).end()
+            }
+        })
+        .catch(error => {
+            console.log(error)
+            res.status(400).send({ error: 'malformatted id' })
         })
 })
 
 app.delete('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-    persons = persons.filter(person => person.id !== id)
-    res.status(204).end()
+    PhoneNumber
+        .findByIdAndDelete(req.params.id)
+        .then(result => {
+            res.status(204).end()
+        })
+        .catch(error => {
+            console.log(error)
+            res.status(400).send({ error: 'malformatted id' })
+        })
 })
 
 app.post('/api/persons', (req, res) => {
@@ -86,10 +102,12 @@ app.post('/api/persons', (req, res) => {
         })
         newnumber
             .save()
+            .then (result => {
+                res.json(PhoneNumber.format(result))
+            })
             .catch(error => {
                 console.log(error)
             })
-            res.json(newnumber)    
     }
     else {
         res.json(status)
