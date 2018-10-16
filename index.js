@@ -38,7 +38,6 @@ app.get('/api/persons', (req, res) => {
 })
 
 app.get('/api/persons/:id', (req, res) => {
-    console.log('*GET ID*', req.params.id)
     PhoneNumber
         .findById(req.params.id)
         .then(phone => {
@@ -69,32 +68,32 @@ app.delete('/api/persons/:id', (req, res) => {
 
 app.post('/api/persons', (req, res) => {
     const data = req.body
-    let isDataValid = true
-    let status = {
-        error: ''
-    }
 
     if (data.name === undefined || data.number === undefined) {
-        status.error = 'Name and number must be specified'
-        isDataValid = false
-    }
-
-    if (isDataValid) {
-        let newnumber = new PhoneNumber({
-            name: data.name,
-            number: data.number
-        })
-        newnumber
-            .save()
-            .then(result => {
-                res.json(PhoneNumber.format(result))
-            })
-            .catch(error => {
-                console.log(error)
-            })
+        res.status(400).send({ error: 'Name and number must be specified' })
     }
     else {
-        res.json(status)
+        PhoneNumber
+            .find({ name: data.name })
+            .then(result => {
+                if (result.length === 0) {
+                    let newnumber = new PhoneNumber({
+                        name: data.name,
+                        number: data.number
+                    })
+                    newnumber
+                        .save()
+                        .then(result => {
+                            res.json(PhoneNumber.format(result))
+                        })
+                        .catch(error => {
+                            console.log(error)
+                        })
+                }
+                else {
+                    res.status(400).send({ error: `Name ${data.name} already exists` })
+                }
+            })
     }
 })
 
