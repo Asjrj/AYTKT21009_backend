@@ -78,17 +78,18 @@ app.post('/api/persons', (req, res) => {
         status.error = 'Name and number must be specified'
         isDataValid = false
     }
-    else {
-        if (persons.find((person) => person.name === data.name)) {
-            status.error = 'Name must be unique'
-            isDataValid = false
-        }
-    }
 
     if (isDataValid) {
-        data.id = getRandomId()
-        persons.push(data)
-        res.json(data)
+        let newnumber = new PhoneNumber({
+            name: data.name,
+            number: data.number
+        })
+        newnumber
+            .save()
+            .catch(error => {
+                console.log(error)
+            })
+            res.json(newnumber)    
     }
     else {
         res.json(status)
