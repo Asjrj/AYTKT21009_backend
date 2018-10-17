@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/info', (req, res) => {
-    let today = new Date().toString();
+    let today = new Date().toString()
     PhoneNumber
         .estimatedDocumentCount()
         .then(result => {
@@ -57,9 +57,7 @@ app.get('/api/persons/:id', (req, res) => {
 app.delete('/api/persons/:id', (req, res) => {
     PhoneNumber
         .findByIdAndDelete(req.params.id)
-        .then(result => {
-            res.status(204).end()
-        })
+        .then(res.status(204).end())
         .catch(error => {
             console.log(error)
             res.status(400).send({ error: 'malformatted id' })
@@ -111,7 +109,7 @@ app.put('/api/persons/:id', (req, res) => {
         })
         .catch(error => {
             console.log(error)
-            response.status(400).send({ error: 'malformatted id' })
+            res.status(400).send({ error: 'malformatted id' })
         })
 })
 
